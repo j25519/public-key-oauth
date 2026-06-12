@@ -212,13 +212,34 @@ Lessons encoded from wiring this to Karakeep's NextAuth, kept here for the next 
 - **User key rotation:** issue a fresh `enroll` link; the stable `sub` means downstream identity is unaffected.
 - **Lockout recovery:** you control the box — re-enable the client app's password auth via env var, or issue yourself a fresh enrollment link from the CLI.
 
+## Donations
+
+Feel free to zap a few sats if you think this is cool!
+
+**Lightning:**
+
+developer@cake.cash
+
+**SegWit:**
+
+bc1qu29u22swnv9elx879aztdntxzq6gyxvmvnyzmh
+
+**Taproot:**
+
+bc1pv68x4f6dfktsppwle2dcjyxmd6ademdtcc4mrw90aeyf6k2p28zstxnvxr
+
+**Silent Payments:**
+
+sp1qqv9ycl5aqd7qyc2jsupldvl8eadkvjpk0wx0v5l2uc63acfz7gtzqqmgvjwygj0n9wphuqw4c4ydygfkdd22mmsc5e8cw8gkktwgheddmqmjv6ay
+
 ## Roadmap
 
-* Rate limiting
-* More unconventional methods of cryptographic authentication
-* Being used as a sign in layer for some other experimental web app
+* Add rate limiting
+* Add more unconventional and/or secure and privacy respecting methods of cryptographic authentication
+* Add setting to use TOTP as the optional second factor instead of a password
+* Being used as a sign in for some other experimental web app I make in the future
 
-# Disclaimer of Warranty
+## Disclaimer of Warranty
 
 This software is provided “as is”, without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement.
 
