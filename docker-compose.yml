@@ -1,0 +1,55 @@
+# PGP OIDC IdP — its own compose project, separate from Karakeep's.
+#
+# First run:
+#   mkdir -p data secrets && sudo chown 1000:1000 data
+#   gpg --export-secret-keys --armor <ADMIN_KEY_ID> > secrets/admin-private-key.asc
+#   chmod 600 secrets/admin-private-key.asc
+#   cp .env.example .env   # set KARAKEEP_CLIENT_SECRET (+ passphrase if any)
+#   docker compose up -d --build
+#
+# Create your user and enrollment link:
+#   docker compose exec pgp-idp node pgp-oidc-idp.mjs add-user james james@example.com
+#   docker compose exec pgp-idp node pgp-oidc-idp.mjs enroll james
+#
+# Tip: a dedicated signing-only admin key is nicer here than your personal
+# key — if the box is ever compromised, you revoke a service key, not yours.
+
+services:
+  pgp-idp:
+    build: .
+    container_name: pgp-idp
+    restart: unless-stopped
+
+    # Bound to loopback: only the reverse proxy on this host can reach it.
+    # If your Caddy runs in Docker instead, delete `ports:` and use the
+    # shared network at the bottom of this file.
+    ports:
+      - "127.0.0.1:3100:3100"
+
+    environment:
+      PORT: "3100"
+      ISSUER: "${IDP_URL:?set in .env}"           # public HTTPS URL of this IdP
+      DB_PATH: "/data/idp.sqlite"
+      ADMIN_PGP_KEY_FILE: "/run/secrets/admin_pgp_key"
+      ADMIN_PGP_PASSPHRASE: "${ADMIN_PGP_PASSPHRASE:-}"
+      KARAKEEP_CLIENT_SECRET: "${KARAKEEP_CLIENT_SECRET:?set in .env}"
+      KARAKEEP_REDIRECT_URI: "${KARAKEEP_URL:?set in .env}/api/auth/callback/custom"
+
+    volumes:
+      - ./data:/data
+
+    secrets:
+      - admin_pgp_key
+
+    # --- Only if Caddy runs in Docker: join its network so the Caddyfile
+    # --- can say `reverse_proxy pgp-idp:3100`, then remove `ports:` above.
+    # networks:
+    #   - proxy
+
+secrets:
+  admin_pgp_key:
+    file: ./secrets/admin-private-key.asc
+
+# networks:
+#   proxy:
+#     external: true   # the network your Caddy container is attached to

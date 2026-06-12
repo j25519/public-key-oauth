@@ -1,0 +1,37 @@
+# Caddyfile — what the reverse proxy needs to expose for the PGP IdP.
+#
+# The IdP must be reachable on ONE public HTTPS hostname that exactly
+# matches the ISSUER env var. Everything lives under that host:
+#   /.well-known/openid-configuration   (Karakeep reads this)
+#   /auth, /token, /jwks                (OIDC endpoints)
+#   /interaction/*                      (the PGP challenge login page)
+#   /enroll/*                           (one-time key enrollment links)
+# No need to route paths individually — proxy the whole host.
+
+idp.example.com {
+	# Humans landing on the bare hostname get sent to Karakeep
+	redir / https://karakeep.example.com
+
+	# Caddy terminates TLS; the app sets oidc.proxy=true so it trusts Caddy
+	reverse_proxy localhost:3100
+
+	# If Caddy runs in Docker on a shared network instead, use:
+	# reverse_proxy pgp-idp:3100
+
+	header {
+		# Hiding unnecessary metadata about our stack
+		-Server
+		-Via
+		-X-Powered-By
+
+		# General security headers
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		X-Robots-Tag "noindex, nofollow"
+		X-Frame-Options "DENY"
+
+		# Strict CSP as we have only a static HTML page with no external resources
+		Content-Security-Policy "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+	}
+}
