@@ -6,7 +6,7 @@ The server stores only your public keys. Your private key for all three cryptogr
 
 ## Purpose
 
-Initially I built this simply because I love Karakeep but it doesn't have any two factor authentication suppor yet. So I thought, this is open source self-hosted software, I'll just make it myself.
+Initially I built this simply because I love Karakeep but it didn't have any two factor authentication support yet. So I thought, this is open source self-hosted software, I'll just make it myself.
 
 From there it took on a life of its own and became something a little different to your average "enter the code from your authenticator app" layer. Something a little more experimental and opinionated.
 
