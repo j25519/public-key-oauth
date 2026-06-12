@@ -1,5 +1,7 @@
 # Public Key Cryptography OIDC Identity Provider
 
+<img width="965" height="585" alt="Initial UI" src="https://github.com/user-attachments/assets/591d67e1-e54e-47b1-9fc5-64be4937eb4f" />
+
 A small, self-hosted OpenID Connect identity provider where your cryptographic keys *are* your login. You choose if you want your key to be your login, or if you want your key plus a password as a second factor.
 
 The server stores only your public keys. Your private key for all three cryptographic logic methods stays in your own hands — your PGP keyring, your Nostr signer, or the secure element of a hardware security key.
