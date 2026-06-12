@@ -6,6 +6,10 @@ The server stores only your public keys. Your private key for all three cryptogr
 
 ## Purpose
 
+Initially I built this simply because I love Karakeep but it doesn't have any two factor authentication suppor yet. So I thought, this is open source self-hosted software, I'll just make it myself.
+
+From there it took on a life of its own and became something a little different to your average "enter the code from your authenticator app" layer. Something a little more experimental and opinionated.
+
 Most self-hosted applications bolt authentication on with a username and password, which means another secret to manage, reuse, leak, and reset. This project replaces that with something better: if you already hold a PGP key, a Nostr identity, or a YubiKey, you already have a stronger cryptographic credential that you own. The IdP turns "prove you hold this key" into a standard OIDC login that any compliant application can consume.
 
 It was designed and battle tested against **[Karakeep](https://karakeep.app)** specifically — the configuration examples below wire it to a Karakeep instance — but it is a **standards-compliant OIDC provider** and is interoperable with anything that speaks OpenID Connect: serves a discovery document, issues authorization codes, signs RS256 ID tokens, and exposes a JWKS endpoint. If your app supports "custom OIDC provider," it supports this.
